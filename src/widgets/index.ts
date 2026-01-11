@@ -14,3 +14,13 @@ export { DashboardChart, MockChart, ProgressiveChart } from './charts';
 
 // Layouts
 export { MainLayout } from './layouts';
+
+// Trade Table
+export { TradeTable } from './trade-table';
+
+// Journal Components
+export { JournalHeader } from './journal-header';
+export type { JournalHeaderProps } from './journal-header';
+export { JournalMetrics, useJournalMetrics, calculateMetrics } from './journal-metrics';
+export type { JournalMetricsProps, JournalMetricsData } from './journal-metrics';
+

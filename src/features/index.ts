@@ -4,3 +4,5 @@
 export { PlanningBoard } from './whiteboard';
 export { FilterMenu } from './journal-filters';
 export type { FilterMenuProps } from './journal-filters';
+export * from './journal-controls';
+export { AuthProvider, useAuth } from './auth';

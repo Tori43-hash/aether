@@ -1,130 +1,189 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+// Trade Entity - Trade Context
+// FSD: entities/trade/model
+
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import type { Trade } from '../types';
-import { STORAGE_KEYS } from '../config';
+import { tradesApi, tokenStorage, CreateTradeDto, UpdateTradeDto } from '../../../shared/api';
 
-const DEFAULT_TRADES: Trade[] = [
-    { id: 7, date: '2025-12-02', entryDate: '2025-12-02T09:30', exitDate: '2025-12-02T16:00', ticker: 'SOL', direction: 'Long', style: 'Intraday', risk: 1.0, pnl: 15.0 },
-    { id: 6, date: '2025-12-01', entryDate: '2025-12-01T14:00', exitDate: '2025-12-03T10:00', ticker: 'XRP', direction: 'Short', style: 'Swing', risk: 2.0, pnl: -5.5 },
-    { id: 5, date: '2025-11-26', entryDate: '2025-11-26T10:00', exitDate: '2025-11-26T12:00', ticker: 'ETH', direction: 'Long', style: 'Intraday', risk: 0.5, pnl: -2.0 },
-    { id: 4, date: '2025-11-25', entryDate: '2025-11-25T18:00', exitDate: '2025-11-26T08:00', ticker: 'BTC', direction: 'Short', style: 'Swing', risk: 1.5, pnl: 8.0 },
-    { id: 3, date: '2025-11-24', entryDate: '2025-11-24T15:00', exitDate: '2025-11-28T16:00', ticker: 'AAPL', direction: 'Long', style: 'Swing', risk: 1.0, pnl: 4.5 },
-    { id: 2, date: '2025-11-22', entryDate: '2025-11-22T09:45', exitDate: '2025-11-22T10:30', ticker: 'TSLA', direction: 'Short', style: 'Intraday', risk: 1.0, pnl: -3.2 },
-    { id: 1, date: '2025-11-20', entryDate: '2025-11-20T11:00', exitDate: '2025-11-20T14:45', ticker: 'NVDA', direction: 'Long', style: 'Intraday', risk: 1.0, pnl: 12.5 },
-];
-
-interface TradeContextType {
+// Context state type
+interface TradeContextValue {
     trades: Trade[];
-    saveTrades: (trades: Trade[]) => void;
-    addTrade: (newTrade: Partial<Trade>) => Trade | null;
-    updateTrade: (updatedTrade: Trade) => void;
+    isLoading: boolean;
+    error: string | null;
+    addTrade: (trade: Omit<Trade, 'id'>) => Promise<Trade | null>;
+    updateTrade: (id: number, updates: Partial<Trade>) => Promise<Trade | null>;
+    deleteTrade: (id: number) => Promise<boolean>;
+    refreshTrades: () => Promise<void>;
 }
 
-const TradeContext = createContext<TradeContextType | undefined>(undefined);
+// Create context
+const TradeContext = createContext<TradeContextValue | undefined>(undefined);
 
-export const TradeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+// Provider props
+interface TradeProviderProps {
+    children: ReactNode;
+}
+
+// Convert Trade to CreateTradeDto
+const toCreateDto = (trade: Omit<Trade, 'id'>): CreateTradeDto => ({
+    date: trade.date,
+    entryDate: trade.entryDate,
+    exitDate: trade.exitDate,
+    ticker: trade.ticker,
+    direction: trade.direction,
+    style: trade.style,
+    risk: trade.risk,
+    pnl: trade.pnl,
+    tda: trade.tda?.map(item => ({
+        label: item.label,
+        condition: item.condition === 'not-met' ? 'not-met' : item.condition,
+        note: item.note,
+    })),
+});
+
+// Convert Trade to UpdateTradeDto
+const toUpdateDto = (updates: Partial<Trade>): UpdateTradeDto => {
+    const dto: UpdateTradeDto = {};
+    if (updates.date !== undefined) dto.date = updates.date;
+    if (updates.entryDate !== undefined) dto.entryDate = updates.entryDate;
+    if (updates.exitDate !== undefined) dto.exitDate = updates.exitDate;
+    if (updates.ticker !== undefined) dto.ticker = updates.ticker;
+    if (updates.direction !== undefined) dto.direction = updates.direction;
+    if (updates.style !== undefined) dto.style = updates.style;
+    if (updates.risk !== undefined) dto.risk = updates.risk;
+    if (updates.pnl !== undefined) dto.pnl = updates.pnl;
+    if (updates.tda !== undefined) {
+        dto.tda = updates.tda.map(item => ({
+            label: item.label,
+            condition: item.condition === 'not-met' ? 'not-met' : item.condition,
+            note: item.note,
+        }));
+    }
+    return dto;
+};
+
+// Provider component
+export const TradeProvider: React.FC<TradeProviderProps> = ({ children }) => {
     const [trades, setTrades] = useState<Trade[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
+    // Load trades from API
+    const refreshTrades = useCallback(async () => {
+        // Check for auth token
+        if (!tokenStorage.hasToken()) {
+            setTrades([]);
+            setIsLoading(false);
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const data = await tradesApi.getAll();
+            setTrades(data);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to load trades';
+            setError(message);
+            console.error('Failed to load trades:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
+    // Initial load
     useEffect(() => {
-        try {
-            const savedTrades = localStorage.getItem(STORAGE_KEYS.TRADES);
+        refreshTrades();
+    }, [refreshTrades]);
 
-            if (savedTrades && savedTrades.trim() !== '') {
-                try {
-                    const parsed = JSON.parse(savedTrades);
-                    if (Array.isArray(parsed)) {
-                        setTrades(parsed);
-                        return;
-                    }
-                } catch (parseError) {
-                    console.warn('Failed to parse trades from localStorage:', parseError);
-                }
+    // Refresh trades when auth state changes (login/logout)
+    useEffect(() => {
+        const handleStorageChange = (e: StorageEvent) => {
+            if (e.key === 'accessToken') {
+                refreshTrades();
             }
-
-            setTrades(DEFAULT_TRADES);
-        } catch (error) {
-            console.error('Error loading trades from localStorage:', error);
-            setTrades(DEFAULT_TRADES); // Fallback to default
-        }
-    }, []);
-
-    const saveTrades = useCallback((updatedTrades: Trade[]) => {
-        setTrades(updatedTrades);
-        try {
-            localStorage.setItem(STORAGE_KEYS.TRADES, JSON.stringify(updatedTrades));
-        } catch (error) {
-            console.error('Error saving trades to localStorage:', error);
-        }
-    }, []);
-
-    const addTrade = useCallback((newTrade: Partial<Trade>): Trade | null => {
-        if (!newTrade.ticker || newTrade.pnl === undefined) return null;
-
-        let entry = newTrade.entryDate;
-        let exit = newTrade.exitDate;
-        const now = new Date();
-        const todayStr = now.toISOString().split('T')[0];
-
-        if (!entry) {
-            entry = todayStr + 'T00:00';
-        }
-        if (!exit) {
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            exit = todayStr + 'T' + h + ':' + m;
-        }
-
-        const trade: Trade = {
-            id: Date.now(),
-            date: entry.split('T')[0],
-            entryDate: entry,
-            exitDate: exit,
-            ticker: newTrade.ticker.toUpperCase(),
-            direction: newTrade.direction as 'Long' | 'Short',
-            style: newTrade.style as 'Intraday' | 'Swing',
-            risk: newTrade.risk || 1.0,
-            pnl: Number(newTrade.pnl),
-            tda: newTrade.tda // Preserve TDA analysis if present
         };
 
-        setTrades(prevTrades => {
-            const updatedTrades = [trade, ...prevTrades];
-            try {
-                localStorage.setItem(STORAGE_KEYS.TRADES, JSON.stringify(updatedTrades));
-            } catch (error) {
-                console.error('Error saving trade to localStorage:', error);
-            }
-            return updatedTrades;
-        });
-        return trade;
+        // Custom event for auth changes within the same tab
+        const handleAuthChange = () => {
+            refreshTrades();
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        window.addEventListener('auth-state-changed', handleAuthChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('auth-state-changed', handleAuthChange);
+        };
+    }, [refreshTrades]);
+
+    // Add trade
+    const addTrade = useCallback(async (trade: Omit<Trade, 'id'>): Promise<Trade | null> => {
+        try {
+            const dto = toCreateDto(trade);
+            const newTrade = await tradesApi.create(dto);
+            setTrades(prev => [...prev, newTrade]);
+            return newTrade;
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to add trade';
+            setError(message);
+            console.error('Failed to add trade:', err);
+            return null;
+        }
     }, []);
 
-    const updateTrade = useCallback((updatedTrade: Trade) => {
-        setTrades(prevTrades => {
-            const index = prevTrades.findIndex(t => t.id === updatedTrade.id);
-            if (index !== -1) {
-                const newTrades = [...prevTrades];
-                newTrades[index] = updatedTrade;
-                try {
-                    localStorage.setItem(STORAGE_KEYS.TRADES, JSON.stringify(newTrades));
-                } catch (error) {
-                    console.error('Error updating trade in localStorage:', error);
-                }
-                return newTrades;
-            }
-            return prevTrades;
-        });
+    // Update trade
+    const updateTrade = useCallback(async (id: number, updates: Partial<Trade>): Promise<Trade | null> => {
+        try {
+            const dto = toUpdateDto(updates);
+            const updatedTrade = await tradesApi.update(id, dto);
+            setTrades(prev => prev.map(t => t.id === id ? updatedTrade : t));
+            return updatedTrade;
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to update trade';
+            setError(message);
+            console.error('Failed to update trade:', err);
+            return null;
+        }
     }, []);
+
+    // Delete trade
+    const deleteTrade = useCallback(async (id: number): Promise<boolean> => {
+        try {
+            await tradesApi.delete(id);
+            setTrades(prev => prev.filter(t => t.id !== id));
+            return true;
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to delete trade';
+            setError(message);
+            console.error('Failed to delete trade:', err);
+            return false;
+        }
+    }, []);
+
+    const value: TradeContextValue = {
+        trades,
+        isLoading,
+        error,
+        addTrade,
+        updateTrade,
+        deleteTrade,
+        refreshTrades,
+    };
 
     return (
-        <TradeContext.Provider value={{ trades, saveTrades, addTrade, updateTrade }}>
+        <TradeContext.Provider value={value}>
             {children}
         </TradeContext.Provider>
     );
 };
 
-export const useTrades = () => {
+// Hook
+export const useTrades = (): TradeContextValue => {
     const context = useContext(TradeContext);
-    if (context === undefined) {
+    if (!context) {
         throw new Error('useTrades must be used within a TradeProvider');
     }
     return context;

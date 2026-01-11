@@ -40,3 +40,23 @@ export type {
     SortConfig,
     SortDirection,
 } from './ui';
+
+// API Layer
+export {
+    httpClient,
+    tokenStorage,
+    ApiError,
+    authApi,
+    tradesApi,
+} from './api';
+
+export type {
+    User,
+    Tokens,
+    LoginDto,
+    RegisterDto,
+    TradeQueryParams,
+    CreateTradeDto,
+    UpdateTradeDto,
+} from './api';
+

@@ -1,12 +1,15 @@
 import React from 'react';
 import { TradeProvider } from '../entities/trade';
+import { AuthProvider } from '../features/auth';
 import { AppRouter } from './routers';
 
 const App: React.FC = () => {
   return (
-    <TradeProvider>
-      <AppRouter />
-    </TradeProvider>
+    <AuthProvider>
+      <TradeProvider>
+        <AppRouter />
+      </TradeProvider>
+    </AuthProvider>
   );
 };
 

@@ -22,10 +22,30 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "entities/*": [
+        "./src/entities/*"
+      ],
+      "features/*": [
+        "./src/features/*"
+      ],
+      "widgets/*": [
+        "./src/widgets/*"
+      ],
+      "pages/*": [
+        "./src/pages/*"
+      ],
+      "shared/*": [
+        "./src/shared/*"
+      ],
+      "app/*": [
+        "./src/app/*"
       ]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

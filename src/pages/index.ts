@@ -4,3 +4,5 @@
 export { DashboardPage } from './dashboard';
 export { JournalPage } from './journal';
 export { StatsPage } from './stats';
+export { LoginPage } from './login';
+export { CanvasJournalPage } from './canvas-journal';

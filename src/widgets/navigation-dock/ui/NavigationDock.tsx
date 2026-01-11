@@ -2,7 +2,7 @@
 // FSD: widgets/navigation-dock
 
 import React, { useMemo } from 'react';
-import { Home, PenTool, BookOpen, Settings, BarChart2 } from 'lucide-react';
+import { Home, PenTool, BookOpen, Settings, BarChart2, Layers } from 'lucide-react';
 
 interface NavigationDockProps {
     currentTab: string;
@@ -20,7 +20,8 @@ const NavigationDockComponent: React.FC<NavigationDockProps> = ({ currentTab, ch
         { id: 'dashboard', icon: Home, label: 'Dashboard' },
         { id: 'stats', icon: BarChart2, label: 'Analytics' },
         { id: 'journal', icon: BookOpen, label: 'Journal' },
-        { id: 'traders', icon: PenTool, label: 'Whiteboard' }
+        { id: 'traders', icon: PenTool, label: 'Whiteboard' },
+        { id: 'canvas-journal', icon: Layers, label: 'Журнал холстов' }
     ], []);
 
     const baseClasses = 'fixed bg-white border border-slate-200 shadow-2xl shadow-slate-200/60 p-2 rounded-3xl z-50 flex items-center gap-2 transition-all duration-300 ease-spring';

@@ -6,6 +6,7 @@ import { NavigationDock } from '../../widgets/navigation-dock';
 import { TradeModal, PreferencesModal } from '../../widgets/modals';
 import { DashboardPage } from '../../pages/dashboard';
 import { JournalPage, TradeDetail as TradeDetailPage } from '../../pages/journal';
+import { LoginPage } from '../../pages/login';
 
 // Shared
 import { usePageTransition, usePreload, useWindowSize, useLayoutConfig } from '../../shared';
@@ -13,6 +14,10 @@ import { usePageTransition, usePreload, useWindowSize, useLayoutConfig } from '.
 // Entities
 import type { Trade } from '../../entities/trade';
 import { useTrades, DEFAULT_TRADE } from '../../entities/trade';
+
+// Features
+import { useAuth } from '../../features/auth';
+
 
 // Lazy Components
 const StatsPage = React.lazy(() =>
@@ -24,13 +29,20 @@ const PlanningBoard = React.lazy(() =>
 const TradeDetail = React.lazy(() =>
     import('../../pages/journal').then(module => ({ default: module.TradeDetail }))
 );
+const CanvasJournalPage = React.lazy(() =>
+    import('../../pages/canvas-journal').then(module => ({ default: module.CanvasJournalPage }))
+);
 
 // Preload functions
 const preloadStats = () => import('../../pages/stats');
 const preloadPlanningBoard = () => import('../../features/whiteboard');
 const preloadTradeDetail = () => import('../../pages/journal');
+const preloadCanvasJournal = () => import('../../pages/canvas-journal');
 
 export const AppRouter: React.FC = () => {
+    // Auth check - show login page if not authenticated
+    const { isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
+
     const [currentTab, setCurrentTab] = useState('dashboard');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['dashboard']));
     const [navPosition, setNavPosition] = useState<'bottom' | 'top' | 'left' | 'right'>('bottom');
@@ -41,10 +53,13 @@ export const AppRouter: React.FC = () => {
     const [skipContainerTransition, setSkipContainerTransition] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Layout Config
+    // Modal State - must be before early returns
+    const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+    const [newTrade, setNewTrade] = useState<Partial<Trade>>(DEFAULT_TRADE);
+    const [activeTrade, setActiveTrade] = useState<Trade | null>(null);
+
     // Layout Config
     const { menuScale, edgeOffset } = useLayoutConfig();
-
 
     // Hooks
     const { addTrade: addTradeHook, updateTrade } = useTrades();
@@ -54,11 +69,6 @@ export const AppRouter: React.FC = () => {
         duration: 200,
         onTransitionEnd: () => { }
     });
-
-    // Modal State
-    const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
-    const [newTrade, setNewTrade] = useState<Partial<Trade>>(DEFAULT_TRADE);
-    const [activeTrade, setActiveTrade] = useState<Trade | null>(null);
 
     const changeTab = useCallback((tab: string) => {
         if (tab === currentTab) return;
@@ -81,9 +91,9 @@ export const AppRouter: React.FC = () => {
         }
     }, [preloadComponent]);
 
-    const addTrade = useCallback(() => {
+    const addTrade = useCallback(async () => {
         if (!newTrade.ticker || newTrade.pnl === undefined) return;
-        const trade = addTradeHook(newTrade);
+        const trade = await addTradeHook(newTrade as Omit<Trade, 'id'>);
         if (trade) {
             setNewTrade(DEFAULT_TRADE);
             setIsTradeModalOpen(false);
@@ -98,8 +108,8 @@ export const AppRouter: React.FC = () => {
         changeTab('trade-detail');
     }, [changeTab]);
 
-    const saveTradeDetail = useCallback((updatedTrade: Trade) => {
-        updateTrade(updatedTrade);
+    const saveTradeDetail = useCallback(async (updatedTrade: Trade) => {
+        await updateTrade(updatedTrade.id, updatedTrade);
         changeTab('journal');
     }, [updateTrade, changeTab]);
 
@@ -140,6 +150,23 @@ export const AppRouter: React.FC = () => {
             window.removeEventListener('ui-hidden-changed', handleUIHiddenChanged);
         };
     }, [currentTab]);
+
+    // Show loading spinner while checking auth - AFTER all hooks
+    if (isAuthLoading) {
+        return (
+            <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin" />
+                    <span className="text-slate-500 text-sm font-medium">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    // Show login page if not authenticated - AFTER all hooks
+    if (!isAuthenticated) {
+        return <LoginPage />;
+    }
 
     // We need to import useLayoutConfig to inject props into JournalPage
     // However, MainLayout already renders the container.
@@ -200,6 +227,18 @@ export const AppRouter: React.FC = () => {
                     </div>
                 )}
 
+                {/* Canvas Journal */}
+                {(visitedTabs.has('canvas-journal') || currentTab === 'canvas-journal') && (
+                    <div
+                        className={`page-content ${currentTab === 'canvas-journal' ? 'page-active' : 'page-inactive'}`}
+                        style={{ display: currentTab === 'canvas-journal' ? 'block' : 'none' }}
+                    >
+                        <Suspense fallback={<div className="flex items-center justify-center h-64 text-slate-400">Загрузка журнала холстов...</div>}>
+                            <CanvasJournalPage />
+                        </Suspense>
+                    </div>
+                )}
+
                 {/* Journal */}
                 {(visitedTabs.has('journal') || currentTab === 'journal') && (
                     <div
@@ -241,6 +280,10 @@ export const AppRouter: React.FC = () => {
                 onClose={() => setIsPreferencesOpen(false)}
                 position={navPosition}
                 setPosition={setNavPosition}
+                onLogout={() => {
+                    logout();
+                    setIsPreferencesOpen(false);
+                }}
             />
         </MainLayout>
     );

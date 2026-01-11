@@ -187,9 +187,10 @@ interface PreferencesModalProps {
     onClose: () => void;
     position: 'bottom' | 'top' | 'left' | 'right';
     setPosition: (pos: 'bottom' | 'top' | 'left' | 'right') => void;
+    onLogout?: () => void;
 }
 
-export const PreferencesModal: React.FC<PreferencesModalProps> = ({ isOpen, onClose, position, setPosition }) => {
+export const PreferencesModal: React.FC<PreferencesModalProps> = ({ isOpen, onClose, position, setPosition, onLogout }) => {
     if (!isOpen) return null;
 
     const positions = [
@@ -240,6 +241,23 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({ isOpen, onCl
                 >
                     Done
                 </button>
+
+                {/* Logout Section */}
+                {onLogout && (
+                    <>
+                        <div className="flex items-center gap-3 my-4">
+                            <div className="flex-1 h-px bg-slate-200"></div>
+                            <span className="text-xs text-slate-400">Account</span>
+                            <div className="flex-1 h-px bg-slate-200"></div>
+                        </div>
+                        <button
+                            onClick={onLogout}
+                            className="w-full py-3 rounded-xl border-2 border-rose-200 text-rose-600 font-bold hover:bg-rose-50 hover:border-rose-300 transition"
+                        >
+                            Sign Out
+                        </button>
+                    </>
+                )}
             </div>
         </div>,
         document.body

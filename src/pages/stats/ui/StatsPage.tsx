@@ -62,7 +62,7 @@ const StatsComponent: React.FC<StatsProps> = ({ changeTab }) => {
             .map(id => rawStats.find(s => s.id === id))
             .filter(s => s !== undefined) as Stat[];
 
-        const missing = rawStats.filter(s => !statsOrder.includes(s.id));
+        const missing = rawStats.filter(s => !statsOrder.includes(String(s.id)));
         return [...ordered, ...missing];
     }, [filteredStatsTrades, statsOrder]);
 
@@ -108,8 +108,8 @@ const StatsComponent: React.FC<StatsProps> = ({ changeTab }) => {
         } else {
             setHiddenStatIds([...hiddenStatIds, id]);
             if (selectedStatId === id) {
-                const firstVisible = currentStatsList.find(s => !hiddenStatIds.includes(s.id) && s.id !== id);
-                if (firstVisible) setSelectedStatId(firstVisible.id);
+                const firstVisible = currentStatsList.find(s => !hiddenStatIds.includes(String(s.id)) && s.id !== id);
+                if (firstVisible) setSelectedStatId(String(firstVisible.id));
             }
         }
     };

@@ -15,12 +15,15 @@ interface DashboardPageProps {
 
 
 const DashboardPageComponent: React.FC<DashboardPageProps> = ({ openTradeModal, changeTab }) => {
-    const { trades } = useTrades();
+    const { trades, isLoading, error } = useTrades();
 
     const { totalPnL, winrate } = useMemo(() => {
+        if (!trades || !Array.isArray(trades) || trades.length === 0) {
+            return { totalPnL: 0, winrate: 0 };
+        }
         const total = trades.reduce((acc, t) => acc + t.pnl, 0);
         const winCount = trades.filter(t => t.pnl > 0).length;
-        const winrate = trades.length === 0 ? 0 : Math.round((winCount / trades.length) * 100);
+        const winrate = Math.round((winCount / trades.length) * 100);
         return { totalPnL: total, winrate };
     }, [trades]);
 
