@@ -1,4 +1,3 @@
-// Pages/Login - Public API
-// FSD: pages/login
+// Page: Login - Public API
 
-export { LoginPage } from './ui/LoginPage';
+export { LoginPage } from './ui/page';

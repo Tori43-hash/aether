@@ -1,10 +1,8 @@
 // Widgets Layer - Public API
 // FSD: Widgets are self-contained UI blocks combining features and entities
-// Allowed imports: shared, entities, features
-// Disallowed imports: pages, app
 
 // Navigation
-export { NavigationDock } from './navigation-dock';
+export { NavigationDock } from './nav';
 
 // Modals
 export { TradeModal, PlanModal, PreferencesModal } from './modals';
@@ -15,12 +13,9 @@ export { DashboardChart, MockChart, ProgressiveChart } from './charts';
 // Layouts
 export { MainLayout } from './layouts';
 
-// Trade Table
-export { TradeTable } from './trade-table';
+// Journal (TradeTable, Header, Metrics)
+export { TradeTable, JournalHeader, JournalMetrics, useJournalMetrics, calculateMetrics } from './journal';
+export type { JournalHeaderProps, JournalMetricsProps, JournalMetricsData } from './journal';
 
-// Journal Components
-export { JournalHeader } from './journal-header';
-export type { JournalHeaderProps } from './journal-header';
-export { JournalMetrics, useJournalMetrics, calculateMetrics } from './journal-metrics';
-export type { JournalMetricsProps, JournalMetricsData } from './journal-metrics';
-
+// Canvas
+export { WhiteboardCanvas, CanvasJournalList, CanvasCard } from './canvas';

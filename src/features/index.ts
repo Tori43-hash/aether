@@ -1,8 +1,14 @@
 // Features Layer - Public API
 // FSD: Features are user scenarios and actions
 
-export { PlanningBoard } from './whiteboard';
-export { FilterMenu } from './journal-filters';
-export type { FilterMenuProps } from './journal-filters';
-export * from './journal-controls';
+// Auth
 export { AuthProvider, useAuth } from './auth';
+
+// Login
+export { LoginForm } from './login';
+
+// Journal
+export * from './journal';
+
+// Canvas
+export { useCanvasJournal } from './canvas';

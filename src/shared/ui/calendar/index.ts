@@ -1,2 +1,2 @@
-export { DualCalendar } from './DualCalendar';
-export type { DualCalendarProps } from './DualCalendar';
+export { DualCalendar } from './dual';
+export type { DualCalendarProps } from './dual';

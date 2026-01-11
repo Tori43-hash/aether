@@ -1,2 +1,2 @@
 // Widget: Modals - Public API
-export { TradeModal, PlanModal, PreferencesModal } from './ui/Modals';
+export { TradeModal, PlanModal, PreferencesModal } from './ui/modals';

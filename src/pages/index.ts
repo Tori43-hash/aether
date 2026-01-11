@@ -3,6 +3,6 @@
 
 export { DashboardPage } from './dashboard';
 export { JournalPage } from './journal';
-export { StatsPage } from './stats';
+export { AnalyticsPage } from './analytics';
 export { LoginPage } from './login';
-export { CanvasJournalPage } from './canvas-journal';
+export { CanvasPage } from './canvas';

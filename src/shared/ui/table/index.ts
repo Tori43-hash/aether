@@ -1,2 +1,2 @@
-export { SortableHeader } from './SortableHeader';
-export type { SortableHeaderProps, SortConfig, SortDirection } from './SortableHeader';
+export { SortableHeader } from './header';
+export type { SortableHeaderProps, SortConfig, SortDirection } from './header';

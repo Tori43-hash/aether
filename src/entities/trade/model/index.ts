@@ -1,1 +1,1 @@
-export { useTrades, TradeProvider } from './tradeContext';
+export { useTrades, TradeProvider } from './context';

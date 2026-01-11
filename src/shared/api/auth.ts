@@ -1,7 +1,7 @@
 // Shared API - Auth Service
 // FSD: shared/api
 
-import { httpClient, tokenStorage } from './httpClient';
+import { httpClient, tokenStorage } from './http';
 
 // Types
 export interface User {

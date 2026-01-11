@@ -1,7 +1,7 @@
 // Shared API - Trades Service
 // FSD: shared/api
 
-import { httpClient } from './httpClient';
+import { httpClient } from './http';
 import type { Trade } from '../../entities/trade';
 
 // Query params type
