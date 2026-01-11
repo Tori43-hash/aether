@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  name          String?
+  avatar        String?
+  refreshToken  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  trades        Trade[]
+  plans         Plan[]
+  canvases      Canvas[]
+}
+
+model Canvas {
+  id        String   @id @default(uuid())
+  name      String
+  strokes   Json     @default("[]")
+  texts     Json     @default("[]")
+  transform Json     @default("{\"scale\":1,\"offset\":{\"x\":0,\"y\":0}}")
+  thumbnail String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Trade {
+  id         Int         @id @default(autoincrement())
+  date       DateTime
+  entryDate  DateTime
+  exitDate   DateTime?
+  ticker     String
+  direction  Direction
+  style      TradeStyle?
+  risk       Float       @default(1.0)
+  pnl        Float
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tdaItems   TdaItem[]
+
+  @@index([userId])
+  @@index([date])
+  @@index([ticker])
+}
+
+model TdaItem {
+  id        Int          @id @default(autoincrement())
+  label     String
+  condition TdaCondition
+  note      String?
+
+  tradeId   Int
+  trade     Trade        @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+
+  @@index([tradeId])
+}
+
+model Plan {
+  id        Int      @id @default(autoincrement())
+  ticker    String
+  image     String?
+  desc      String?
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum Direction {
+  Long
+  Short
+}
+
+enum TradeStyle {
+  Scalping
+  Intraday
+  Intraweek
+  Swing
+}
+
+enum TdaCondition {
+  met
+  not_met
+  partial
+}
