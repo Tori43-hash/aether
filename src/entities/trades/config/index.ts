@@ -1,7 +1,7 @@
 // Trade Entity Configuration
 // FSD: entities/trade/config
 
-import type { Trade, Trader } from '../types';
+import type { Trade, Trader } from '../model/types';
 
 export const STORAGE_KEYS = {
     TRADES: 'aether_trades',

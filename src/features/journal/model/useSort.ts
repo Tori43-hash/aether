@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
-import type { Trade } from '../../../entities/trade';
-import type { SortConfig } from '../../../shared';
-import type { SortField } from '../types';
+import type { Trade } from '../../../entities/trades';
+import type { SortConfig } from '../../../shared/ui';
+import type { SortField } from './types';
 
 export interface UseJournalSortReturn {
     sortConfig: SortConfig<SortField>;

@@ -4,8 +4,7 @@
 export { httpClient, tokenStorage, ApiError } from './http';
 export { authApi } from './auth';
 export type { User, Tokens, LoginDto, RegisterDto } from './auth';
-export { tradesApi } from './trades';
-export type { TradeQueryParams, CreateTradeDto, UpdateTradeDto } from './trades';
+// Note: tradesApi moved to entities/trade/api (FSD compliance)
 export { canvasApi, generateThumbnail, createEmptyCanvasData } from './canvas';
 export type {
     CreateCanvasDto,

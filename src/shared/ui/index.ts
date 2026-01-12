@@ -14,3 +14,19 @@ export type { DraggableMenuProps, ViewSettingsMenuProps } from './menu';
 // Table components
 export { SortableHeader } from './table';
 export type { SortableHeaderProps, SortConfig, SortDirection } from './table';
+
+// Layout components
+export {
+    PageGrid,
+    PageSection,
+    PageHeader,
+    PageSectionFull
+} from './layout';
+export type {
+    PageGridProps,
+    PageSectionProps,
+    PageHeaderProps,
+    PageSectionFullProps,
+    SectionColumns,
+    SectionGap
+} from './layout';

@@ -1,4 +1,4 @@
-import type { Trade, RiskStats, Timeframe } from '../types';
+import type { Trade, RiskStats, Timeframe } from '../model/types';
 
 /**
  * Get trading session based on entry time (UTC).

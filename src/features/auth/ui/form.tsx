@@ -1,9 +1,9 @@
-// Features/LoginForm - Login Form Component
-// FSD: features/login-form/ui
+// Features/Auth/UI - Login Form Component
+// FSD: features/auth/ui
 
 import React, { useState, useCallback } from 'react';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
-import { useAuth } from '../../auth';
+import { useAuth } from '../model';
 
 interface LoginFormProps {
     onSuccess?: () => void;

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Trade } from '../../../entities/trade';
+import type { Trade } from '../../../entities/trades';
 
 export interface JournalMetricsData {
     totalPnL: number;

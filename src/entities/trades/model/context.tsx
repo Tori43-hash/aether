@@ -2,8 +2,9 @@
 // FSD: entities/trade/model
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import type { Trade } from '../types';
-import { tradesApi, tokenStorage, CreateTradeDto, UpdateTradeDto } from '../../../shared/api';
+import type { Trade } from './types';
+import { tradesApi, type CreateTradeDto, type UpdateTradeDto } from '../api';
+import { tokenStorage } from '../../../shared/api';
 
 // Context state type
 interface TradeContextValue {

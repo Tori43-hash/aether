@@ -2,8 +2,8 @@
 // FSD: widgets/charts
 
 import React from 'react';
-import { useProgressiveLoad } from '../../../shared';
-import type { Trade, Timeframe, ChartStyle, ChartColor, Stat } from '../../../entities/trade';
+import { useProgressiveLoad } from '../../../shared/lib';
+import type { Trade, Timeframe, ChartStyle, ChartColor, Stat } from '../../../entities/trades';
 import { DashboardChart } from './dashboard';
 
 interface ProgressiveChartProps {

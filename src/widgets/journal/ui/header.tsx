@@ -3,7 +3,7 @@ import {
     ChevronDown, ChevronLeft, ChevronRight,
     Check, LineChart, Columns3, Filter, Search, Settings, X
 } from 'lucide-react';
-import { DualCalendar, DraggableMenu, ViewSettingsMenu } from '../../../shared';
+import { DualCalendar, DraggableMenu, ViewSettingsMenu } from '../../../shared/ui';
 import { FilterMenu } from '../../../features/journal';
 import type { FilterState, DateFilterMode } from '../../../features/journal';
 import { DATE_OPTIONS, METRIC_LABELS, PROPERTY_LABELS } from '../../../features/journal';

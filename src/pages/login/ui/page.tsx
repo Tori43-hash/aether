@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Sparkles } from 'lucide-react';
-import { LoginForm } from '../../../features/login';
+import { LoginForm } from '../../../features/auth';
 
 export const LoginPage: React.FC = () => {
     return (

@@ -1,5 +1,5 @@
 // Trade Entity Types
-// FSD: entities/trade/types
+// FSD: entities/trades/model/types
 
 export interface TdaItem {
     label?: string;

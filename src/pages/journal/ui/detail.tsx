@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Calendar, Save, Trash2 } from 'lucide-react';
-import type { Trade, TdaItem } from '../../../entities/trade';
-import { formatPercent } from '../../../shared';
-import { formatTradeDate } from '../../../entities/trade';
+import type { Trade, TdaItem } from '../../../entities/trades';
+import { formatPercent } from '../../../shared/lib';
+import { formatTradeDate } from '../../../entities/trades';
 
 interface TradeDetailProps {
   trade: Trade;

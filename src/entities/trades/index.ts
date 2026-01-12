@@ -1,7 +1,7 @@
 // Trade Entity - Public API
-// FSD: entities/trade
+// FSD: entities/trades
 
-// Types
+// Types (from model)
 export type {
     Trade,
     TdaItem,
@@ -13,7 +13,7 @@ export type {
     ChartColor,
     Plan,
     Trader,
-} from './types';
+} from './model/types';
 
 // Config
 export { STORAGE_KEYS, DEFAULT_TRADE, DEFAULT_TRADERS } from './config';
@@ -32,3 +32,6 @@ export {
     formatTradeDate
 } from './lib';
 
+// API
+export { tradesApi } from './api';
+export type { TradeQueryParams, CreateTradeDto, UpdateTradeDto } from './api';

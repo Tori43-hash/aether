@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { DEFAULT_METRICS_ORDER } from '../types';
+import { DEFAULT_METRICS_ORDER } from './types';
 
 export interface UseMetricsConfigReturn {
     metricsOrder: string[];

@@ -2,12 +2,13 @@ import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { Check, Minus } from 'lucide-react';
 
 // Shared layer imports
-import { useProgressiveLoad, formatPercent, SortableHeader } from '../../../shared';
-import type { SortConfig } from '../../../shared';
+import { useProgressiveLoad, formatPercent } from '../../../shared/lib';
+import { SortableHeader } from '../../../shared/ui';
+import type { SortConfig } from '../../../shared/ui';
 
 // Entities layer imports
-import type { Trade } from '../../../entities/trade';
-import { getSession, getWeekday, getHoldTime, formatTableDate } from '../../../entities/trade';
+import type { Trade } from '../../../entities/trades';
+import { getSession, getWeekday, getHoldTime, formatTableDate } from '../../../entities/trades';
 
 // --- Types ---
 

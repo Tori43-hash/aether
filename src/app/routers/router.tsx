@@ -9,11 +9,11 @@ import { JournalPage, TradeDetail as TradeDetailPage } from '../../pages/journal
 import { LoginPage } from '../../pages/login';
 
 // Shared
-import { usePageTransition, usePreload, useWindowSize, useLayoutConfig } from '../../shared';
+import { usePageTransition, usePreload, useWindowSize, useLayoutConfig } from '../../shared/lib';
 
 // Entities
-import type { Trade } from '../../entities/trade';
-import { useTrades, DEFAULT_TRADE } from '../../entities/trade';
+import type { Trade } from '../../entities/trades';
+import { useTrades, DEFAULT_TRADE } from '../../entities/trades';
 
 // Features
 import { useAuth } from '../../features/auth';

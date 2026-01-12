@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { formatPercent } from '../../../shared';
+import { formatPercent } from '../../../shared/lib';
 import type { JournalMetricsData } from '../lib/calculate';
 
 interface MetricDisplayItem {

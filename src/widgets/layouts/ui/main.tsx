@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 
-import { useLayoutConfig } from '../../../shared';
+import { useLayoutConfig } from '../../../shared/lib';
 
 interface MainLayoutProps {
     children: React.ReactNode;

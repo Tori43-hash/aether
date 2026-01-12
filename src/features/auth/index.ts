@@ -2,3 +2,4 @@
 // FSD: features/auth
 
 export { AuthProvider, useAuth } from './model';
+export { LoginForm } from './ui';

@@ -13,8 +13,8 @@ import {
     Tooltip,
     CartesianGrid
 } from 'recharts';
-import type { Trade, ChartType, ChartStyle, ChartColor, Timeframe, Stat } from '../../../entities/trade';
-import { getFilteredTrades } from '../../../entities/trade';
+import type { Trade, ChartType, ChartStyle, ChartColor, Timeframe, Stat } from '../../../entities/trades';
+import { getFilteredTrades } from '../../../entities/trades';
 
 // --- Safe Wrapper (AutoSizer) ---
 interface SafeChartWrapperProps {

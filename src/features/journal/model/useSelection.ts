@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { Trade } from '../../../entities/trade';
+import type { Trade } from '../../../entities/trades';
 
 export interface UseJournalSelectionReturn {
     selectedIds: number[];

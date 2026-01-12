@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { PenTool, Eraser, MousePointer, Undo, Redo, Palette, Minus, Settings, Type } from 'lucide-react';
-import { DebouncedColorInput } from '../../../shared';
+import { DebouncedColorInput } from '../../../shared/ui';
 import { ToolType } from 'entities/canvas';
 import { TOOLBAR_COLORS } from 'entities/canvas';
 

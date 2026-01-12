@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:fsd": "steiger ./src",
+    "lint:fsd:watch": "steiger ./src --watch"
   },
   "dependencies": {
     "lucide-react": "^0.555.0",
@@ -16,9 +18,12 @@
     "recharts": "^3.5.1"
   },
   "devDependencies": {
+    "@feature-sliced/steiger-plugin": "^0.5.7",
     "@types/node": "^22.14.0",
     "@types/react-window": "^1.8.8",
     "@vitejs/plugin-react": "^5.0.0",
+    "knip": "^5.80.2",
+    "steiger": "^0.5.11",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

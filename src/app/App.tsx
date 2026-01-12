@@ -1,5 +1,5 @@
 import React from 'react';
-import { TradeProvider } from '../entities/trade';
+import { TradeProvider } from '../entities/trades';
 import { AuthProvider } from '../features/auth';
 import { AppRouter } from './routers';
 

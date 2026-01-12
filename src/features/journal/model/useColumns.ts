@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { DEFAULT_COLUMNS_ORDER, DEFAULT_COLUMN_WIDTHS } from '../types';
+import { DEFAULT_COLUMNS_ORDER, DEFAULT_COLUMN_WIDTHS } from './types';
 
 export interface UseColumnConfigReturn {
     columnsOrder: string[];

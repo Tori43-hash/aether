@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { CanvasListItem } from 'shared/api';
+import { PageGrid, PageSection, PageHeader } from '../../../shared/ui';
 import { CanvasCard } from './card';
 
 interface CanvasJournalListProps {
@@ -22,37 +23,36 @@ export const CanvasJournalList: React.FC<CanvasJournalListProps> = ({
     onRenameCanvas,
 }) => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50 p-6">
-            {/* Header */}
-            <div className="max-w-6xl mx-auto">
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 className="text-2xl font-bold text-slate-800">Журнал холстов</h1>
-                        <p className="text-slate-500 mt-1">Управляйте своими рабочими пространствами</p>
-                    </div>
-
-                    <button
-                        onClick={onCreateCanvas}
-                        className="
-              flex items-center gap-2 px-5 py-2.5
-              bg-gradient-to-r from-violet-500 to-indigo-500
-              text-white font-medium rounded-xl
-              shadow-lg shadow-violet-500/25
-              hover:shadow-xl hover:shadow-violet-500/30
-              hover:scale-105
-              transition-all duration-200
-            "
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                        Создать холст
-                    </button>
-                </div>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50">
+            <PageGrid>
+                {/* Header */}
+                <PageHeader
+                    title="Журнал холстов"
+                    subtitle="Управляйте своими рабочими пространствами"
+                    actions={
+                        <button
+                            onClick={onCreateCanvas}
+                            className="
+                                flex items-center gap-2 px-5 py-2.5
+                                bg-gradient-to-r from-violet-500 to-indigo-500
+                                text-white font-medium rounded-xl
+                                shadow-lg shadow-violet-500/25
+                                hover:shadow-xl hover:shadow-violet-500/30
+                                hover:scale-105
+                                transition-all duration-200
+                            "
+                        >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                            Создать холст
+                        </button>
+                    }
+                />
 
                 {/* Canvas Grid */}
                 {canvasList.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    <PageSection columns={3} gap="md">
                         {canvasList.map((canvas) => (
                             <CanvasCard
                                 key={canvas.id}
@@ -63,7 +63,7 @@ export const CanvasJournalList: React.FC<CanvasJournalListProps> = ({
                                 onRename={(name) => onRenameCanvas(canvas.id, name)}
                             />
                         ))}
-                    </div>
+                    </PageSection>
                 ) : (
                     // Empty state
                     <div className="flex flex-col items-center justify-center py-20">
@@ -79,14 +79,14 @@ export const CanvasJournalList: React.FC<CanvasJournalListProps> = ({
                         <button
                             onClick={onCreateCanvas}
                             className="
-                flex items-center gap-2 px-6 py-3
-                bg-gradient-to-r from-violet-500 to-indigo-500
-                text-white font-medium rounded-xl
-                shadow-lg shadow-violet-500/25
-                hover:shadow-xl hover:shadow-violet-500/30
-                hover:scale-105
-                transition-all duration-200
-              "
+                                flex items-center gap-2 px-6 py-3
+                                bg-gradient-to-r from-violet-500 to-indigo-500
+                                text-white font-medium rounded-xl
+                                shadow-lg shadow-violet-500/25
+                                hover:shadow-xl hover:shadow-violet-500/30
+                                hover:scale-105
+                                transition-all duration-200
+                            "
                         >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -95,7 +95,7 @@ export const CanvasJournalList: React.FC<CanvasJournalListProps> = ({
                         </button>
                     </div>
                 )}
-            </div>
+            </PageGrid>
         </div>
     );
 };

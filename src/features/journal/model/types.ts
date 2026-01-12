@@ -1,5 +1,6 @@
 /**
- * Feature: journal-controls
+ * Feature: journal
+ * FSD: features/journal/model/types
  * Types for journal filtering, sorting, and selection.
  */
 

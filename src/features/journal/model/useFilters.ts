@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
-import type { Trade } from '../../../entities/trade';
-import type { FilterState, StyleOption, DateFilterMode } from '../types';
-import { DEFAULT_FILTER_STATE } from '../types';
+import type { Trade } from '../../../entities/trades';
+import type { FilterState, StyleOption, DateFilterMode } from './types';
+import { DEFAULT_FILTER_STATE } from './types';
 
 export interface UseJournalFiltersReturn {
     filters: FilterState;

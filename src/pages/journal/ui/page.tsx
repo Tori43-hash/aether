@@ -1,8 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 
 // Entities layer imports
-import type { Trade } from '../../../entities/trade';
-import { useTrades } from '../../../entities/trade';
+import type { Trade } from '../../../entities/trades';
+import { useTrades } from '../../../entities/trades';
 
 // Features layer imports
 import {
@@ -15,6 +15,9 @@ import {
 
 // Widgets layer imports
 import { TradeTable, JournalHeader, JournalMetrics, useJournalMetrics } from '../../../widgets/journal';
+
+// Shared layer imports
+import { PageGrid } from '../../../shared/ui';
 
 // --- Types ---
 
@@ -101,64 +104,67 @@ export const Journal: React.FC<JournalProps> = ({
             className="journal-view flex flex-col h-full bg-white relative"
             style={{ opacity: 1, transform: 'none', animation: 'none' }}
         >
-            <header
-                id="journal-header"
-                className="journal-view__header w-full bg-white z-40 pt-6"
-                style={{
-                    marginBottom: `${metricsConfig.marginBottom}px`,
-                    paddingLeft: '48px'
-                }}
-            >
-                <JournalHeader
-                    filters={filters}
-                    setFilters={setFilters}
-                    dateFilterMode={dateFilterMode}
-                    applyDateFilter={applyDateFilter}
-                    isCustomPickerOpen={isCustomPickerOpen}
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    metricsOrder={metricsOrder}
-                    setMetricsOrder={setMetricsOrder}
-                    hiddenMetrics={hiddenMetrics}
-                    toggleMetricVisibility={toggleMetricVisibility}
-                    columnsOrder={columnsOrder}
-                    setColumnsOrder={setColumnsOrder}
-                    hiddenColumns={hiddenColumns}
-                    toggleColumnVisibility={toggleColumnVisibility}
-                    isTextWrapEnabled={isTextWrapEnabled}
-                    setIsTextWrapEnabled={setIsTextWrapEnabled}
-                    openTradeModal={openTradeModal}
-                    controlsScale={controlsScale}
-                    dateToggleConfig={dateToggleConfig}
-                    positionsConfig={positionsConfig}
-                />
+            <PageGrid className="flex-1 flex flex-col !gap-0">
+                <header
+                    id="journal-header"
+                    className="journal-view__header w-full bg-white z-40"
+                    style={{
+                        marginBottom: `${metricsConfig.marginBottom}px`,
+                    }}
+                >
+                    <JournalHeader
+                        filters={filters}
+                        setFilters={setFilters}
+                        dateFilterMode={dateFilterMode}
+                        applyDateFilter={applyDateFilter}
+                        isCustomPickerOpen={isCustomPickerOpen}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        metricsOrder={metricsOrder}
+                        setMetricsOrder={setMetricsOrder}
+                        hiddenMetrics={hiddenMetrics}
+                        toggleMetricVisibility={toggleMetricVisibility}
+                        columnsOrder={columnsOrder}
+                        setColumnsOrder={setColumnsOrder}
+                        hiddenColumns={hiddenColumns}
+                        toggleColumnVisibility={toggleColumnVisibility}
+                        isTextWrapEnabled={isTextWrapEnabled}
+                        setIsTextWrapEnabled={setIsTextWrapEnabled}
+                        openTradeModal={openTradeModal}
+                        controlsScale={controlsScale}
+                        dateToggleConfig={dateToggleConfig}
+                        positionsConfig={positionsConfig}
+                    />
 
-                <JournalMetrics
-                    metrics={metrics}
-                    metricsOrder={metricsOrder}
-                    hiddenMetrics={hiddenMetrics}
-                    scale={metricsConfig.scale}
-                    fontWeight={metricsConfig.fontWeight}
-                />
-            </header>
+                    <JournalMetrics
+                        metrics={metrics}
+                        metricsOrder={metricsOrder}
+                        hiddenMetrics={hiddenMetrics}
+                        scale={metricsConfig.scale}
+                        fontWeight={metricsConfig.fontWeight}
+                    />
+                </header>
 
-            <TradeTable
-                trades={sortedTrades}
-                sortConfig={sortConfig}
-                onSort={handleSort}
-                selectedIds={selectedIds}
-                onToggleSelection={toggleSelection}
-                onToggleSelectAll={toggleSelectAll}
-                visibleColumns={visibleColumns}
-                columnWidths={columnWidths}
-                onResize={startResize}
-                onRowClick={openTradeDetail}
-                isTextWrapEnabled={isTextWrapEnabled}
-            />
+                <div className="flex-1">
+                    <TradeTable
+                        trades={sortedTrades}
+                        sortConfig={sortConfig}
+                        onSort={handleSort}
+                        selectedIds={selectedIds}
+                        onToggleSelection={toggleSelection}
+                        onToggleSelectAll={toggleSelectAll}
+                        visibleColumns={visibleColumns}
+                        columnWidths={columnWidths}
+                        onResize={startResize}
+                        onRowClick={openTradeDetail}
+                        isTextWrapEnabled={isTextWrapEnabled}
+                    />
+                </div>
 
-            <footer id="journal-footer" className="journal-view__footer text-xs text-slate-400 text-center py-4">
-                Showing {sortedTrades.length} of {trades.length} trades
-            </footer>
+                <footer id="journal-footer" className="journal-view__footer text-xs text-slate-400 text-center py-4">
+                    Showing {sortedTrades.length} of {trades.length} trades
+                </footer>
+            </PageGrid>
         </section>
     );
 };

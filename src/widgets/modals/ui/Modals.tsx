@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { createPortal } from 'react-dom';
-import type { Trade, Plan } from '../../../entities/trade';
+import type { Trade, Plan } from '../../../entities/trades';
 import { LayoutTemplate } from 'lucide-react';
 
 interface TradeModalProps {

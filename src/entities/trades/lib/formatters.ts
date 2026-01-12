@@ -1,4 +1,4 @@
-import type { Trade } from '../types';
+import type { Trade } from '../model/types';
 
 export const formatTradeDate = (trade: Trade, isFull = false) => {
     if (!trade.entryDate) return { __html: trade.date };

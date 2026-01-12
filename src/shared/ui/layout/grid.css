@@ -1,0 +1,175 @@
+/* Unified Grid System - CSS Variables */
+
+:root {
+  /* Spacing Scale (8px base) */
+  --grid-gap-xs: 8px;
+  --grid-gap-sm: 16px;
+  --grid-gap-md: 24px;
+  --grid-gap-lg: 32px;
+  --grid-gap-xl: 48px;
+
+  /* Page Container */
+  --page-max-width: 1600px;
+  --page-padding-x: clamp(24px, 5vw, 80px);
+  --page-padding-y: clamp(24px, 4vh, 48px);
+
+  /* Card Heights */
+  --card-height-sm: 120px;
+  --card-height-md: 160px;
+  --card-height-lg: 240px;
+  --card-height-chart: clamp(280px, 40vh, 420px);
+
+  /* Section spacing */
+  --section-gap: var(--grid-gap-lg);
+}
+
+/* Page Grid Container */
+.page-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--page-padding-y) var(--page-padding-x);
+  box-sizing: border-box;
+}
+
+/* Page Section - Grid Layout */
+.page-section {
+  display: grid;
+  gap: var(--grid-gap-md);
+  width: 100%;
+}
+
+/* Fixed 3 columns layout */
+.page-section--cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.page-section--cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.page-section--cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.page-section--cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Asymmetric layouts */
+.page-section--cols-1-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.page-section--cols-2-1 {
+  grid-template-columns: 2fr 1fr;
+}
+
+.page-section--cols-1-3 {
+  grid-template-columns: 1fr 3fr;
+}
+
+.page-section--cols-3-1 {
+  grid-template-columns: 3fr 1fr;
+}
+
+/* Gap variants */
+.page-section--gap-sm {
+  gap: var(--grid-gap-sm);
+}
+
+.page-section--gap-md {
+  gap: var(--grid-gap-md);
+}
+
+.page-section--gap-lg {
+  gap: var(--grid-gap-lg);
+}
+
+/* Full width item in grid */
+.page-section__full {
+  grid-column: 1 / -1;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--grid-gap-md);
+  width: 100%;
+}
+
+.page-header__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-header__title {
+  font-size: 1.875rem;
+  font-weight: 300;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.page-header__subtitle {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--grid-gap-sm);
+}
+
+/* Stat Card */
+.stat-card {
+  height: var(--card-height-md);
+  padding: var(--grid-gap-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Chart Card */
+.chart-card {
+  min-height: var(--card-height-chart);
+  padding: var(--grid-gap-md) var(--grid-gap-lg);
+}
+
+/* Responsive adjustments - mobile first */
+@media (max-width: 768px) {
+  .page-section--cols-2,
+  .page-section--cols-3,
+  .page-section--cols-4,
+  .page-section--cols-1-2,
+  .page-section--cols-2-1,
+  .page-section--cols-1-3,
+  .page-section--cols-3-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--grid-gap-md);
+  }
+
+  .page-header__actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .page-section--cols-3,
+  .page-section--cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
